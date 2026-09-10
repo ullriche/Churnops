@@ -1,0 +1,5 @@
+[core]
+    remote = r2
+['remote "r2"']
+    url = s3://churnops-dvc-storage
+    endpointurl = https://8ae78424783b5f73b91ddd8d67b71048.r2.cloudflarestorage.com

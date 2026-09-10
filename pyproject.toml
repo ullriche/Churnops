@@ -18,6 +18,7 @@ build-backend = "uv_build"
 
 [dependency-groups]
 dev = [
+    "dvc[s3]>=3.67.1",
     "mypy>=2.3.1",
     "pre-commit>=4.6.2",
 ]
