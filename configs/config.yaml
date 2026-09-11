@@ -1,9 +1,24 @@
 defaults:
-  - model: mlp
-  - dataset: churn
+  - data: churn
+  - model: xgb
   - _self_
 
 training:
   batch_size: 5634 # Number of training samples
   learning_rate: 0.001
   epochs: 50
+  early_stopping_rounds: 20
+  eval_metric: logloss
+
+general:
+  random_state: 42
+  device: cpu
+
+mlflow:
+  tracking_uri: http://localhost:3030
+  artifact_location: mlflow-artifacts:/
+  experiment_name: churnops
+  log_models: auto # true, false, or auto | auto logs the model for single-runs, but not for multi-runs
+  log_input_examples: true
+  log_model_signatures: true
+  log_datasets: auto # true, false, or auto | auto logs the dataset for single-runs, but not for multi-runs

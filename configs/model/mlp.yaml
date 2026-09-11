@@ -1,5 +1,0 @@
-name: mlp
-hidden_layers:
-  - 64
-  - 32
-  - 16

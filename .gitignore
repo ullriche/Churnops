@@ -219,3 +219,8 @@ __marimo__/
 
 # Custom
 .DS_Store
+outputs/
+multirun/
+mlruns/
+mlflow.db
+mlflow_metadata/

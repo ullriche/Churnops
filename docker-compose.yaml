@@ -1,0 +1,20 @@
+services:
+  mlflow:
+    image: ghcr.io/mlflow/mlflow:latest
+    container_name: churnops_mlflow
+    restart: unless-stopped
+    ports:
+      - "3030:5000"
+    environment:
+      - AWS_ACCESS_KEY_ID=${R2_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${R2_SECRET_ACCESS_KEY}
+      - MLFLOW_S3_ENDPOINT_URL=https://${CLOUDFLARE_ACCOUNT_ID}.r2.cloudflarestorage.com
+    volumes:
+      - ./data/mlflow_metadata:/mlflow/metadata
+    command: >
+      mlflow server
+        --backend-store-uri sqlite:////mlflow/metadata/mlflow.db
+        --default-artifact-root s3://churnops-mlflow-artifacts
+        --serve-artifacts
+        --host 0.0.0.0
+        --port 5000

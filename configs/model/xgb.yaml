@@ -1,0 +1,6 @@
+name: xgb
+max_depth: 4
+subsample: 0.8
+colsample_bytree: 0.8
+reg_lambda: 1.0
+tree_method: hist
