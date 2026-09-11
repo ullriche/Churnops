@@ -2,7 +2,7 @@
 
 * **Status:** Accepted
 * **Date:** 2026-09-10
-* **Deciders:** ullriche
+* **Deciders:** Eike Christoph Ullrich / ullriche
 
 ## Context and Problem Statement
 Installing of dependencies. Reproducable environment (virtual, docker). Handling requirement trees of dependencies.

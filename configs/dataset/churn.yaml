@@ -1,0 +1,5 @@
+name: churn
+dir: data/preprocessed/
+train_file: train.npz
+val_file: val.npz
+test_file: test.npz

@@ -1,0 +1,9 @@
+defaults:
+  - model: mlp
+  - dataset: churn
+  - _self_
+
+training:
+  batch_size: 5634 # Number of training samples
+  learning_rate: 0.001
+  epochs: 50
