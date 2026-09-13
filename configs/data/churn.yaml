@@ -1,6 +1,10 @@
 name: churn
-dir: data/preprocessed/
-file_type: npz
+source: blastchar/telco-customer-churn/WA_Fn-UseC_-Telco-Customer-Churn.csv
+from_kaggle: True
+raw_path: data/raw.parquet
+preprocessed_dir: data/preprocessed/
+split: [0.8, 0.1, 0.1]
+processed_file_type: npz
 train_file: train.npz
 val_file: val.npz
 test_file: test.npz

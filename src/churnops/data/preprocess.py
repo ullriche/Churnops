@@ -1,34 +1,19 @@
-import argparse
 import numpy as np
 import pandas as pd
 from pathlib import Path
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler, OneHotEncoder
 from sklearn.compose import ColumnTransformer
+import warnings
+import hydra
+from omegaconf import DictConfig
 
 
-def read_cli_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Preprocess data for churn analysis.")
-
-    parser.add_argument("--input", type=Path, help="Path to the (raw) input data file.")
-    parser.add_argument(
-        "--output", type=Path, help="Directory to save the preprocessed data to."
-    )
-    parser.add_argument(
-        "--split",
-        type=float,
-        nargs=3,
-        default=[0.8, 0.1, 0.1],
-        help="Train/validation/test split ratios. Default is [0.8, 0.1, 0.1].",
-    )
-    parser.add_argument(
-        "--random-state",
-        type=int,
-        default=42,
-        help="Random state for reproducibility. Default is 42.",
-    )
-
-    return parser.parse_args()
+@hydra.main(config_path="../../../configs/", config_name="config", version_base=None)
+def main(cfg: DictConfig):
+    df = read_data(Path(cfg.data.raw_path))
+    train, val, test = preprocess_data(df, cfg.data.split, cfg.general.random_state)
+    save_data(train, val, test, Path(cfg.data.preprocessed_dir))
 
 
 def read_data(input_path: Path) -> pd.DataFrame:
@@ -52,6 +37,17 @@ def preprocess_data(df: pd.DataFrame, split: list, random_state: int) -> tuple:
 
     categorical_cols = X.select_dtypes(include=["object", "str"]).columns.to_list()
     numerical_cols = X.select_dtypes(include=["number"]).columns.to_list()
+    other_cols = X.select_dtypes(exclude=["object", "str", "number"]).columns.to_list()
+
+    if len(other_cols) > 0:
+        invalid_types = X[other_cols].dtypes
+        cols_and_dtypes = [
+            f"{col}: {dtype}" for col, dtype in zip(other_cols, invalid_types)
+        ]
+        warnings.warn(
+            f"Data contains data types that are not supported! Those columns will be dropped! `cols`: {cols_and_dtypes}",
+            UserWarning,
+        )
 
     if len(split) != 3 or not np.isclose(sum(split), 1.0):
         raise ValueError(
@@ -115,7 +111,4 @@ def save_data(
 
 
 if __name__ == "__main__":
-    args = read_cli_args()
-    df = read_data(args.input)
-    train, val, test = preprocess_data(df, args.split, args.random_state)
-    save_data(train, val, test, args.output)
+    main()
